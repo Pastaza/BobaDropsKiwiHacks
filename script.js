@@ -191,7 +191,7 @@ const QUESTIONS = [
   },
   {
     q: 'What percentage of Earth is covered by clouds at any time?',
-    opts: ['25 %', '45 %', '67 %', '90 %'],
+    opts: ['25%', '45%', '67%', '90%'],
     ans: 2,
     exp: 'About 67 % of Earth\'s surface is covered by clouds at any given moment!'
   },
