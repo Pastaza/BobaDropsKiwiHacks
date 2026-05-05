@@ -1,13 +1,174 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <link rel="stylesheet" href="style.css"
-    Boba Drops
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cloud World — Up in the Clouds!</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  
+
   <body>
-    <h1>Boba Drops</h1>
-    <p>Free BOBA NIKO</p>
-    <img src="https://png.pngtree.com/png-vector/20240611/ourmid/pngtree-bubble-tea-with-milk-and-tapioca-pearls-on-transparent-background-png-image_12658459.png"/>
+    <!-- Three.js 3D Cloud Canvas (fixed background) -->
+    <canvas id="cloudCanvas"></canvas>
+
+    <!-- CSS decorative clouds (fixed overlay) -->
+    <div class="css-clouds" aria-hidden="true">
+      <div class="cloud c1"></div>
+      <div class="cloud c2"></div>
+      <div class="cloud c3"></div>
+      <div class="cloud c4"></div>
+      <div class="cloud c5"></div>
+    </div>
+
+    <!-- ── Hero ── -->
+    <header class="hero">
+      <div class="hero-content">
+        <h1 class="title">☁️ Cloud World ☁️</h1>
+        <p class="subtitle">Drift away into the fluffy, wonderful world of clouds!</p>
+        <a href="#facts" class="btn">Explore Clouds ↓</a>
+      </div>
+    </header>
+
+    <!-- ── Cloud Facts ── -->
+    <section id="facts" class="facts-section">
+      <h2>⛅ Amazing Cloud Facts</h2>
+      <div class="facts-grid">
+        <div class="fact-card">
+          <span class="fact-icon">💧</span>
+          <h3>Clouds Weigh a Lot!</h3>
+          <p>A typical cumulus cloud weighs about <strong>1.1 million pounds</strong>
+            (500,000 kg) — that's like 100 elephants floating in the sky!</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-icon">🌡️</span>
+          <h3>Clouds Can Be Super Cold</h3>
+          <p>High-altitude cirrus clouds form at temperatures as low as
+            <strong>-40 °C (-40 °F)</strong> and are made of tiny ice crystals.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-icon">🏔️</span>
+          <h3>Clouds Live High Up</h3>
+          <p>Noctilucent clouds form at the edge of space, around
+            <strong>80 km (50 miles)</strong> above Earth's surface!</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-icon">⚡</span>
+          <h3>Lightning Factories</h3>
+          <p>A single cumulonimbus can reach <strong>18 km (11 miles)</strong> high
+            and generate 100+ lightning bolts per minute.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-icon">🌈</span>
+          <h3>Rainbow Makers</h3>
+          <p>Water droplets in clouds act as <strong>tiny prisms</strong> that split
+            sunlight into all colours of the rainbow.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-icon">🌍</span>
+          <h3>Clouds Cover Earth</h3>
+          <p>At any given moment, about <strong>67 %</strong> of Earth's surface is
+            covered by clouds — they play a huge role in our climate!</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-icon">🔬</span>
+          <h3>Tiny Droplets</h3>
+          <p>Clouds are made of water droplets so tiny it takes about
+            <strong>1 million of them</strong> to make a single raindrop.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-icon">🪐</span>
+          <h3>Clouds on Other Planets</h3>
+          <p>Venus has clouds of <strong>sulfuric acid</strong>, while Jupiter's
+            famous storms are giant cloud systems bigger than Earth!</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-icon">🎨</span>
+          <h3>Clouds Change Colour</h3>
+          <p>Clouds appear white, grey, pink, orange, and even
+            <strong>green before tornadoes</strong> depending on light and storm
+            conditions.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Cloud Types ── -->
+    <section class="types-section">
+      <h2>🌤️ Types of Clouds</h2>
+      <div class="types-grid">
+        <div class="type-card">
+          <div class="cloud-3d cumulus-3d" aria-hidden="true"></div>
+          <h3>Cumulus</h3>
+          <p>Puffy, white "fair-weather" clouds that look like cotton balls.
+            Found at low to mid altitudes.</p>
+        </div>
+        <div class="type-card">
+          <div class="cloud-3d cirrus-3d" aria-hidden="true"></div>
+          <h3>Cirrus</h3>
+          <p>Thin, wispy, feather-like clouds at high altitudes, made entirely of
+            ice crystals.</p>
+        </div>
+        <div class="type-card">
+          <div class="cloud-3d stratus-3d" aria-hidden="true"></div>
+          <h3>Stratus</h3>
+          <p>Flat, grey blanket clouds that cover the whole sky, bringing drizzle
+            and overcast days.</p>
+        </div>
+        <div class="type-card">
+          <div class="cloud-3d cumulonimbus-3d" aria-hidden="true"></div>
+          <h3>Cumulonimbus</h3>
+          <p>The mighty thunderstorm cloud! Towering, dark, and packed with
+            lightning and heavy rain.</p>
+        </div>
+        <div class="type-card">
+          <div class="cloud-3d altocumulus-3d" aria-hidden="true"></div>
+          <h3>Altocumulus</h3>
+          <p>Mid-level fluffy clouds that appear in rows or waves, sometimes
+            called a "mackerel sky."</p>
+        </div>
+        <div class="type-card">
+          <div class="cloud-3d nimbostratus-3d" aria-hidden="true"></div>
+          <h3>Nimbostratus</h3>
+          <p>Thick, dark grey clouds that bring steady, continuous rainfall or
+            snowfall.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Interactive Weather Maker ── -->
+    <section class="weather-section">
+      <h2>⛈️ Make Your Own Weather!</h2>
+      <p>Click a button to change the sky!</p>
+      <div class="weather-buttons">
+        <button class="weather-btn" onclick="setWeather('sunny')">☀️ Sunny</button>
+        <button class="weather-btn" onclick="setWeather('cloudy')">☁️ Cloudy</button>
+        <button class="weather-btn" onclick="setWeather('rainy')">🌧️ Rainy</button>
+        <button class="weather-btn" onclick="setWeather('stormy')">⛈️ Stormy</button>
+        <button class="weather-btn" onclick="setWeather('night')">🌙 Night Clouds</button>
+      </div>
+      <div id="weather-display" class="weather-display">
+        <div id="rain-container"></div>
+        <p id="weather-msg">Pick a weather type above!</p>
+      </div>
+    </section>
+
+    <!-- ── Cloud Quiz ── -->
+    <section class="quiz-section">
+      <h2>🧠 Cloud Quiz!</h2>
+      <div class="quiz-box">
+        <p id="quiz-question">Ready to test your cloud knowledge?</p>
+        <div id="quiz-options" class="quiz-options"></div>
+        <p id="quiz-feedback" class="quiz-feedback"></p>
+        <button class="quiz-btn" onclick="nextQuestion()">Start Quiz ▶</button>
+      </div>
+    </section>
+
+    <!-- ── Footer ── -->
+    <footer class="footer">
+      <p>☁️ Cloud World — Head in the clouds since 2026 ☁️</p>
+    </footer>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
