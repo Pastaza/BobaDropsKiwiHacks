@@ -4,7 +4,8 @@ import { Container } from "./ui";
 const links = [
   { href: "/identify", label: "Identify" },
   { href: "/forecast", label: "Sky forecast" },
-  { href: "/atlas", label: "Cloud atlas" }
+  { href: "/atlas", label: "Cloud atlas" },
+  { href: "/guide", label: "Guide" }
 ];
 
 export function Nav() {

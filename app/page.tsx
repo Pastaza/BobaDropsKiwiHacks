@@ -20,6 +20,9 @@ export default function Home() {
                 <Button href="/forecast" kind="secondary">
                   Check the sky forecast
                 </Button>
+                <Button href="/guide" kind="secondary">
+                  Learn to identify clouds
+                </Button>
               </div>
             </div>
 

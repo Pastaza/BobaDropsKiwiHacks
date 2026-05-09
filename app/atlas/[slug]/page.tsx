@@ -6,6 +6,17 @@ export function generateStaticParams() {
   return ATLAS.map((e) => ({ slug: e.slug }));
 }
 
+function jsonLd(entry: { name: string; summary: string; slug: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: entry.name,
+    description: entry.summary,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `/atlas/${entry.slug}` },
+    author: { "@type": "Organization", name: "I Really Like Clouds" }
+  };
+}
+
 export async function generateMetadata({
   params
 }: {
@@ -32,6 +43,11 @@ export default async function AtlasEntryPage({
   return (
     <main className="py-12">
       <Container>
+        <script
+          type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: safe static JSON-LD
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(entry)) }}
+        />
         <Pill>Cloud Atlas</Pill>
         <h1 className="mt-4 font-display text-4xl tracking-tight text-ink-950">{entry.name}</h1>
         <p className="mt-3 max-w-2xl text-ink-800">{entry.summary}</p>

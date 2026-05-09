@@ -39,11 +39,26 @@ export default async function ForecastCityPage({
   const moments = data.hourly.time.slice(0, 24).map((t, i) => {
     const date = new Date(t);
     const hour = date.getHours();
+
     const cloudCover = data.hourly.cloud_cover[i];
+    const cloudLow = data.hourly.cloud_cover_low[i];
+    const cloudMid = data.hourly.cloud_cover_mid[i];
+    const cloudHigh = data.hourly.cloud_cover_high[i];
+
     const visKm = data.hourly.visibility[i] / 1000;
+    const precipProb = data.hourly.precipitation_probability[i];
+    const precipMm = data.hourly.precipitation[i];
+    const windKph = data.hourly.wind_speed_10m[i];
 
     const scored = scoreSkyMoment({
       cloudCover,
+      cloudLow,
+      cloudMid,
+      cloudHigh,
+      precipProb,
+      precipMm,
+      visibilityKm: visKm,
+      windKph,
       isGoldenHour: isGoldenHour(hour),
       isNight: hour < 6 || hour > 21
     });
@@ -52,7 +67,12 @@ export default async function ForecastCityPage({
       time: t,
       hour,
       cloudCover,
+      cloudLow,
+      cloudMid,
+      cloudHigh,
       visKm,
+      precipProb,
+      windKph,
       score: scored.score,
       note: scored.note
     };
@@ -75,7 +95,7 @@ export default async function ForecastCityPage({
             <p className="mt-3 text-3xl font-semibold text-ink-950">{best.score}/100</p>
             <p className="mt-2 text-sm text-ink-700">{best.note}</p>
             <div className="mt-4 text-xs text-ink-600">
-              Cloud cover: {best.cloudCover}% · Visibility: {best.visKm.toFixed(1)} km
+              Clouds: {best.cloudCover}% (low {best.cloudLow} / mid {best.cloudMid} / high {best.cloudHigh}) · Visibility: {best.visKm.toFixed(1)} km
             </div>
           </Card>
 
@@ -87,6 +107,7 @@ export default async function ForecastCityPage({
                   <div className="text-xs text-ink-600">{String(m.hour).padStart(2, "0")}:00</div>
                   <div className="mt-1 text-lg font-semibold text-ink-950">{m.score}</div>
                   <div className="mt-1 text-xs text-ink-600">{m.cloudCover}% clouds</div>
+                  <div className="mt-1 text-[11px] text-ink-600">{m.precipProb}% rain · {Math.round(m.windKph)} kph</div>
                 </div>
               ))}
             </div>
