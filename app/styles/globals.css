@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+::selection {
+  background: rgba(161, 214, 255, 0.7);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-sky text-ink-950 antialiased;
+}
+
+a {
+  @apply underline-offset-4;
+}
