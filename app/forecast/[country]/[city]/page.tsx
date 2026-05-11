@@ -7,6 +7,35 @@ function isGoldenHour(h: number) {
   return h === 6 || h === 7 || h === 18 || h === 19;
 }
 
+function nowKeyInTz(tz: string) {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: tz,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(now);
+
+  const get = (type: string) => parts.find((p) => p.type === type)?.value || "";
+  const yyyy = get("year");
+  const mm = get("month");
+  const dd = get("day");
+
+  const hh = new Intl.DateTimeFormat("en-GB", {
+    timeZone: tz,
+    hour: "2-digit",
+    hour12: false
+  }).format(now);
+
+  return `${yyyy}-${mm}-${dd}T${hh}`;
+}
+
+function hourFromOpenMeteoTime(t: string) {
+  // Open-Meteo returns local times like "YYYY-MM-DDTHH:00" when timezone is set.
+  const h = Number(t.slice(11, 13));
+  return Number.isFinite(h) ? h : 0;
+}
+
 export default async function ForecastCityPage({
   searchParams
 }: {
@@ -36,9 +65,10 @@ export default async function ForecastCityPage({
 
   const data = await getOpenMeteoHourly(lat, lon, tz);
 
+  const nowKey = nowKeyInTz(tz);
+
   const moments = data.hourly.time.slice(0, 24).map((t, i) => {
-    const date = new Date(t);
-    const hour = date.getHours();
+    const hour = hourFromOpenMeteoTime(t);
 
     const cloudCover = data.hourly.cloud_cover[i];
     const cloudLow = data.hourly.cloud_cover_low[i];
@@ -66,6 +96,8 @@ export default async function ForecastCityPage({
     return {
       time: t,
       hour,
+      isNow: t.startsWith(nowKey),
+      isPast: t < nowKey,
       cloudCover,
       cloudLow,
       cloudMid,
@@ -100,16 +132,33 @@ export default async function ForecastCityPage({
           </Card>
 
           <Card className="sm:col-span-2">
-            <h2 className="font-semibold">Hourly</h2>
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {moments.slice(0, 16).map((m) => (
-                <div key={m.time} className="rounded-xl bg-white/70 p-3 ring-1 ring-ink-900/10">
-                  <div className="text-xs text-ink-600">{String(m.hour).padStart(2, "0")}:00</div>
-                  <div className="mt-1 text-lg font-semibold text-ink-950">{m.score}</div>
-                  <div className="mt-1 text-xs text-ink-600">{m.cloudCover}% clouds</div>
-                  <div className="mt-1 text-[11px] text-ink-600">{m.precipProb}% rain · {Math.round(m.windKph)} kph</div>
-                </div>
-              ))}
+            <div className="flex items-end justify-between gap-4">
+              <h2 className="font-semibold">Next 24 hours</h2>
+              <div className="text-xs text-ink-600">Highlighted: current hour</div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+              {moments.map((m) => {
+                const cls = m.isNow
+                  ? "rounded-xl bg-ink-950/5 p-3 ring-2 ring-ink-950/30"
+                  : m.isPast
+                    ? "rounded-xl bg-white/60 p-3 ring-1 ring-ink-900/10 opacity-70"
+                    : "rounded-xl bg-white/70 p-3 ring-1 ring-ink-900/10";
+
+                return (
+                  <div key={m.time} className={cls}>
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-ink-600">{String(m.hour).padStart(2, "0")}:00</div>
+                      {m.isNow ? <span className="text-[11px] font-semibold text-ink-900">Now</span> : null}
+                    </div>
+                    <div className="mt-1 text-lg font-semibold text-ink-950">{m.score}</div>
+                    <div className="mt-1 text-xs text-ink-600">{m.cloudCover}% clouds</div>
+                    <div className="mt-1 text-[11px] text-ink-600">
+                      {m.precipProb}% rain · {Math.round(m.windKph)} kph
+                    </div>
+                  </div>
+                );
+              })}
             </div>
             <p className="mt-4 text-xs text-ink-600">
               This is v1: it’s intentionally simple. Later we’ll add horizon breaks, precipitation, wind shear, and camera-based validation.
