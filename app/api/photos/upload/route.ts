@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     const bucket = process.env.SUPABASE_PHOTO_BUCKET ?? DEFAULT_PHOTO_BUCKET;
 
     const ext = (file.name.split(".").pop() || "jpg").toLowerCase().slice(0, 8);
-    const key = `${Date.now()}-${safeSlug(title) || "cloud"}.${ext}`;
+    const key = `${crypto.randomUUID()}-${safeSlug(title) || "cloud"}.${ext}`;
 
     const bytes = Buffer.from(await file.arrayBuffer());
 
