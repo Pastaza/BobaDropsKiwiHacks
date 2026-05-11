@@ -45,6 +45,9 @@ PHOTO_ADMIN_TOKEN=...
 # Optional: by default uploads are auto-approved (open to the public).
 # Set to false if you want moderation first.
 PHOTO_AUTO_APPROVE=true
+
+# Admin page (feature photos)
+# Visit /admin/photos and paste PHOTO_ADMIN_TOKEN into the page once.
 ```
 
 ## Deploy
