@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { Button, Card, Container, Pill } from "../components/ui";
 import { getPhotoThreads } from "../lib/photos";
 import { listApprovedCloudPhotos } from "../lib/photos-supabase";
@@ -15,6 +16,9 @@ function formatDate(iso: string) {
 }
 
 export default async function PhotosPage() {
+  // This page should reflect new uploads quickly.
+  // (Avoids confusion when someone uploads and the gallery looks empty due to caching.)
+  noStore();
   const hasSupabase = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
   const photos = hasSupabase ? await listApprovedCloudPhotos() : [];
