@@ -19,22 +19,10 @@ export default async function PhotosPage() {
   const repo = process.env.PHOTO_THREADS_REPO ?? "Pastaza/BobaDropsKiwiHacks";
   const label = process.env.PHOTO_THREADS_LABEL ?? "cloud-photo";
 
-  const newIssueUrl = `https://github.com/${repo}/issues/new?labels=${encodeURIComponent(label)}&title=${encodeURIComponent(
-    "Cloud photo: "
-  )}&body=${encodeURIComponent(
-    [
-      "Upload (drag & drop) a single cloud photo and share a few details:",
-      "",
-      "- Location (optional):",
-      "- Date/time (optional):",
-      "- Cloud guess (optional):",
-      "- Camera / lens (optional):",
-      "",
-      "Tip: keep it cloud-only 🌥️",
-      "",
-      "(This is a beta community feed; moderation is light for now.)"
-    ].join("\n")
-  )}`;
+  // Use an issue form so the label is reliably applied (even for outside contributors).
+  const newIssueUrl = `https://github.com/${repo}/issues/new?template=${encodeURIComponent(
+    "cloud-photo.yml"
+  )}&labels=${encodeURIComponent(label)}&title=${encodeURIComponent("Cloud photo: ")}`;
 
   return (
     <main className="py-10">
