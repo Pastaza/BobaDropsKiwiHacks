@@ -1,7 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { Button, Card, Container, Pill } from "../components/ui";
 import { getPhotoThreads } from "../lib/photos";
-import { listApprovedCloudPhotos } from "../lib/photos-supabase";
+import { getFeaturedCloudPhoto, listApprovedCloudPhotos } from "../lib/photos-supabase";
 
 function formatDate(iso: string) {
   try {
@@ -21,6 +21,8 @@ export default async function PhotosPage() {
   noStore();
   const hasSupabase = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
+  const featuredWeek = hasSupabase ? await getFeaturedCloudPhoto("week") : null;
+  const featuredMonth = hasSupabase ? await getFeaturedCloudPhoto("month") : null;
   const photos = hasSupabase ? await listApprovedCloudPhotos() : [];
   const threads = !hasSupabase ? await getPhotoThreads() : [];
 
@@ -53,6 +55,44 @@ export default async function PhotosPage() {
             </Button>
           </div>
         </div>
+
+        {hasSupabase && (featuredWeek || featuredMonth) ? (
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {featuredWeek ? (
+              <Card>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={featuredWeek.image_url}
+                  alt={featuredWeek.title}
+                  className="h-64 w-full rounded-xl object-cover ring-1 ring-ink-900/10"
+                  loading="lazy"
+                />
+                <div className="mt-4">
+                  <Pill>Photo of the week</Pill>
+                  <div className="mt-2 font-semibold text-ink-950">{featuredWeek.title}</div>
+                  {featuredWeek.caption ? <p className="mt-2 text-sm text-ink-700">{featuredWeek.caption}</p> : null}
+                </div>
+              </Card>
+            ) : null}
+
+            {featuredMonth ? (
+              <Card>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={featuredMonth.image_url}
+                  alt={featuredMonth.title}
+                  className="h-64 w-full rounded-xl object-cover ring-1 ring-ink-900/10"
+                  loading="lazy"
+                />
+                <div className="mt-4">
+                  <Pill>Photo of the month</Pill>
+                  <div className="mt-2 font-semibold text-ink-950">{featuredMonth.title}</div>
+                  {featuredMonth.caption ? <p className="mt-2 text-sm text-ink-700">{featuredMonth.caption}</p> : null}
+                </div>
+              </Card>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {hasSupabase ? (
