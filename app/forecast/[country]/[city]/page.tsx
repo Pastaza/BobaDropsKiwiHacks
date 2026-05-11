@@ -79,6 +79,8 @@ export default async function ForecastCityPage({
     const precipProb = data.hourly.precipitation_probability[i];
     const precipMm = data.hourly.precipitation[i];
     const windKph = data.hourly.wind_speed_10m[i];
+    const wind80Kph = data.hourly.wind_speed_80m[i];
+    const windShearKph = Math.abs(wind80Kph - windKph);
 
     const scored = scoreSkyMoment({
       cloudCover,
@@ -89,6 +91,7 @@ export default async function ForecastCityPage({
       precipMm,
       visibilityKm: visKm,
       windKph,
+      windShearKph,
       isGoldenHour: isGoldenHour(hour),
       isNight: hour < 6 || hour > 21
     });
@@ -105,6 +108,8 @@ export default async function ForecastCityPage({
       visKm,
       precipProb,
       windKph,
+      windShearKph,
+      horizonBreakLikelihood: Math.max(0, Math.min(100, 100 - cloudLow)),
       score: scored.score,
       note: scored.note
     };
@@ -155,13 +160,18 @@ export default async function ForecastCityPage({
                     <div className="mt-1 text-xs text-ink-600">{m.cloudCover}% clouds</div>
                     <div className="mt-1 text-[11px] text-ink-600">
                       {m.precipProb}% rain · {Math.round(m.windKph)} kph
+                      {Number.isFinite(m.windShearKph) ? ` · shear ${Math.round(m.windShearKph)} kph` : ""}
+                    </div>
+                    <div className="mt-1 text-[11px] text-ink-600">
+                      Horizon breaks: {Math.round(m.horizonBreakLikelihood)}%
                     </div>
                   </div>
                 );
               })}
             </div>
             <p className="mt-4 text-xs text-ink-600">
-              This is v1: it’s intentionally simple. Later we’ll add horizon breaks, precipitation, wind shear, and camera-based validation.
+              v1, but not hand-wavy: the score already uses cloud layers, precipitation probability/amount, visibility, wind,
+              a basic horizon-break heuristic, and (lightly) wind shear.
             </p>
           </Card>
         </div>

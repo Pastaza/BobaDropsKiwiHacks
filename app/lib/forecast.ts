@@ -35,6 +35,7 @@ export function scoreSkyMoment(params: {
   precipMm?: number;
   visibilityKm?: number;
   windKph?: number;
+  windShearKph?: number;
   isGoldenHour: boolean;
   isNight: boolean;
 }) {
@@ -52,6 +53,7 @@ export function scoreSkyMoment(params: {
     precipMm = 0,
     visibilityKm,
     windKph,
+    windShearKph,
     isGoldenHour,
     isNight
   } = params;
@@ -82,6 +84,18 @@ export function scoreSkyMoment(params: {
     else score -= 6;
   }
 
+  // Horizon breaks (very rough): low cloud tends to cap the horizon and flatten the scene.
+  // We use this as a gentle adjustment, not a big swing.
+  const horizonBreakLikelihood = clamp(100 - cloudLow, 0, 100);
+  score += (horizonBreakLikelihood - 50) * 0.05;
+
+  // Wind shear (very rough): difference between surface and higher winds can correlate with texture.
+  // Keep effect small until validated.
+  if (typeof windShearKph === "number") {
+    if (windShearKph > 35) score -= 4;
+    else if (windShearKph > 20) score += 2;
+  }
+
   if (isGoldenHour) score += 14;
   if (isNight) score -= 12;
 
@@ -90,6 +104,7 @@ export function scoreSkyMoment(params: {
   let note = "";
   if (precipProb >= 60) note = "Rain likely — dramatic light is harder, but watch for post-shower breaks.";
   else if (cloudLow > 70) note = "Lots of low cloud — look for brief breaks near the horizon.";
+  else if (horizonBreakLikelihood < 30) note = "Horizon looks capped — you may get flat light unless breaks open up.";
   else if (cloudCover < 15) note = "Mostly clear — great for stars; less texture for sunsets.";
   else if (cloudCover < 35) note = "Some texture — good odds for color if clouds catch the sun.";
   else if (cloudCover < 75) note = "Excellent cloud drama range — keep an eye on breaks near sunset.";
@@ -112,7 +127,8 @@ export async function getOpenMeteoHourly(lat: number, lon: number, tz: string) {
       "visibility",
       "precipitation_probability",
       "precipitation",
-      "wind_speed_10m"
+      "wind_speed_10m",
+      "wind_speed_80m"
     ].join(",")
   );
   url.searchParams.set("forecast_days", "2");
@@ -131,6 +147,7 @@ export async function getOpenMeteoHourly(lat: number, lon: number, tz: string) {
       precipitation_probability: number[];
       precipitation: number[];
       wind_speed_10m: number[];
+      wind_speed_80m: number[];
     };
   }>;
 }
