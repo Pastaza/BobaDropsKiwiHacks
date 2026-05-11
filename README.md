@@ -8,6 +8,9 @@ A delightful, high-performance cloud identification + sky forecast site.
 - **Identify (beta)**: upload a sky photo and get a best-effort ID.
   - If `OPENAI_API_KEY` is set, the server uses vision to generate a richer result.
   - If not set, the app falls back to a friendly, non-blocking placeholder.
+- **Cloud photo threads (beta)**: a community feed powered by GitHub issues (no extra infra).
+  - Default repo: `Pastaza/BobaDropsKiwiHacks`
+  - Label: `cloud-photo`
 
 ## Getting started
 
@@ -24,6 +27,12 @@ Create `.env.local`:
 ```bash
 OPENAI_API_KEY=...
 SITE_URL=https://ireallylikeclouds.xyz
+
+# Optional: community photo feed (GitHub issues)
+PHOTO_THREADS_REPO=Pastaza/BobaDropsKiwiHacks
+PHOTO_THREADS_LABEL=cloud-photo
+# Optional: increases GitHub API rate limits
+GITHUB_TOKEN=...
 ```
 
 ## Deploy
