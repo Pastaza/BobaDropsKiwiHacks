@@ -39,6 +39,7 @@ export async function createPendingCloudPhoto(params: {
   title: string;
   caption?: string;
   storagePath: string;
+  status?: "pending" | "approved" | "rejected";
 }) {
   const supabase = supabaseServer();
 
@@ -48,7 +49,7 @@ export async function createPendingCloudPhoto(params: {
       title: params.title,
       caption: params.caption ?? null,
       storage_path: params.storagePath,
-      status: "pending"
+      status: params.status ?? "pending"
     })
     .select("id")
     .single();

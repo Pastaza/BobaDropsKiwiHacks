@@ -50,13 +50,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: upload.error.message }, { status: 500 });
     }
 
+    // Default: open community feed (auto-approve). Set PHOTO_AUTO_APPROVE=false to require manual approval.
+    const autoApprove = process.env.PHOTO_AUTO_APPROVE !== "false";
+    const status = autoApprove ? "approved" : "pending";
+
     const row = await createPendingCloudPhoto({
       title,
       caption: caption || undefined,
-      storagePath: key
+      storagePath: key,
+      status
     });
 
-    return NextResponse.json({ ok: true, id: row.id, status: "pending" });
+    return NextResponse.json({ ok: true, id: row.id, status });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Upload failed";
     return NextResponse.json({ ok: false, error: msg }, { status: 500 });

@@ -42,6 +42,9 @@ SUPABASE_SERVICE_ROLE_KEY=...
 SUPABASE_PHOTO_BUCKET=cloud-photos
 # Used by /api/photos/approve (basic admin approval step)
 PHOTO_ADMIN_TOKEN=...
+# Optional: by default uploads are auto-approved (open to the public).
+# Set to false if you want moderation first.
+PHOTO_AUTO_APPROVE=true
 ```
 
 ## Deploy

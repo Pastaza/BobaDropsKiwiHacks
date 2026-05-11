@@ -1,16 +1,26 @@
 -- Supabase schema for ireallylikeclouds.xyz cloud photo feed
 --
--- Suggested usage:
--- 1) Create a public Storage bucket: cloud-photos
--- 2) Run this SQL in the Supabase SQL editor
--- 3) Keep writes server-side using SUPABASE_SERVICE_ROLE_KEY (simplest for MVP)
+-- Run this in Supabase SQL Editor.
+--
+-- Notes:
+-- - Image bytes live in Supabase Storage (bucket: cloud-photos)
+-- - Photo metadata lives in Postgres (table: public.cloud_photos)
+-- - Our app writes server-side using SUPABASE_SERVICE_ROLE_KEY.
+
+-- Needed for gen_random_uuid()
+create extension if not exists pgcrypto;
+
+-- Optional: create the storage bucket via SQL (you can also do this in the UI)
+insert into storage.buckets (id, name, public)
+values ('cloud-photos', 'cloud-photos', true)
+on conflict (id) do nothing;
 
 create table if not exists public.cloud_photos (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
   title text not null,
   caption text,
-  status text not null default 'pending' check (status in ('pending','approved','rejected')),
+  status text not null default 'approved' check (status in ('pending','approved','rejected')),
   storage_path text not null
 );
 
