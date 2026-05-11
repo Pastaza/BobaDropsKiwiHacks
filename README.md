@@ -28,11 +28,20 @@ Create `.env.local`:
 OPENAI_API_KEY=...
 SITE_URL=https://ireallylikeclouds.xyz
 
-# Optional: community photo feed (GitHub issues)
+# Community photo feed (choose one)
+
+## Option A: GitHub issues (default, $0 infra)
 PHOTO_THREADS_REPO=Pastaza/BobaDropsKiwiHacks
 PHOTO_THREADS_LABEL=cloud-photo
 # Optional: increases GitHub API rate limits
 GITHUB_TOKEN=...
+
+## Option B: Supabase (real backend)
+SUPABASE_URL=https://xxxx.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=...
+SUPABASE_PHOTO_BUCKET=cloud-photos
+# Used by /api/photos/approve (basic admin approval step)
+PHOTO_ADMIN_TOKEN=...
 ```
 
 ## Deploy
