@@ -15,6 +15,8 @@ insert into storage.buckets (id, name, public)
 values ('cloud-photos', 'cloud-photos', true)
 on conflict (id) do nothing;
 
+create extension if not exists pgcrypto;
+
 create table if not exists public.cloud_photos (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
