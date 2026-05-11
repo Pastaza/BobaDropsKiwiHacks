@@ -17,6 +17,9 @@ export default function Home() {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button href="/identify">Identify a cloud</Button>
+                <Button href="/photos" kind="secondary">
+                  Browse cloud photos
+                </Button>
                 <Button href="/forecast" kind="secondary">
                   Check the sky forecast
                 </Button>

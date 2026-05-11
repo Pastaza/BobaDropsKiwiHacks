@@ -1,0 +1,42 @@
+name: Cloud photo
+description: Share a single cloud photo for the ireallylikeclouds.xyz community feed
+title: "Cloud photo: "
+labels:
+  - cloud-photo
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing a cloud photo 🌥️
+
+        **Please attach one image** (drag & drop into the text box below).
+
+        Tip: keep it **cloud-only** (no faces / people / license plates).
+
+  - type: textarea
+    id: photo
+    attributes:
+      label: Photo + details
+      description: Drag & drop your cloud photo here, then add any optional details.
+      placeholder: |
+        (Drag & drop your image here)
+
+        Location (optional):
+        Date/time (optional):
+        Cloud guess (optional):
+        Camera / lens (optional):
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: rights
+    attributes:
+      label: Rights
+      options:
+        - label: I took this photo (or I have permission to share it).
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        (This is a beta community feed; moderation is light for now.)
