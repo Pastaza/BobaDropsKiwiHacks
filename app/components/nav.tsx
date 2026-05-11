@@ -4,6 +4,7 @@ import { Container } from "./ui";
 const links = [
   { href: "/identify", label: "Identify" },
   { href: "/forecast", label: "Sky forecast" },
+  { href: "/validate", label: "Validate" },
   { href: "/atlas", label: "Cloud atlas" },
   { href: "/photos", label: "Photos" },
   { href: "/guide", label: "Guide" }

@@ -112,7 +112,8 @@ export async function getOpenMeteoHourly(lat: number, lon: number, tz: string) {
       "visibility",
       "precipitation_probability",
       "precipitation",
-      "wind_speed_10m"
+      "wind_speed_10m",
+      "wind_speed_80m"
     ].join(",")
   );
   url.searchParams.set("forecast_days", "2");
@@ -131,6 +132,7 @@ export async function getOpenMeteoHourly(lat: number, lon: number, tz: string) {
       precipitation_probability: number[];
       precipitation: number[];
       wind_speed_10m: number[];
+      wind_speed_80m: number[];
     };
   }>;
 }

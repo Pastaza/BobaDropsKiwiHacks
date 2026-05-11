@@ -116,7 +116,15 @@ export default async function ForecastCityPage({
     <main className="py-12">
       <Container>
         <Pill>Sky forecast</Pill>
-        <h1 className="mt-4 font-display text-4xl tracking-tight text-ink-950">{name}</h1>
+        <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
+          <h1 className="font-display text-4xl tracking-tight text-ink-950">{name}</h1>
+          <a
+            className="rounded-xl bg-white/80 px-4 py-2 text-sm font-semibold text-ink-950 ring-1 ring-ink-900/10 hover:bg-white"
+            href={`/validate?lat=${encodeURIComponent(String(lat))}&lon=${encodeURIComponent(String(lon))}&tz=${encodeURIComponent(tz)}&name=${encodeURIComponent(name)}&timeKey=${encodeURIComponent(nowKey)}`}
+          >
+            Validate with a photo
+          </a>
+        </div>
         <p className="mt-3 max-w-2xl text-ink-800">
           A simple cloud-based score (0–100) for the next ~24 hours. Powered by Open‑Meteo.
         </p>
